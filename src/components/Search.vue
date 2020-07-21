@@ -1,10 +1,41 @@
 <template>
-  <input type="text" placeholder="type an username..." />
+  <input type="text" v-model="username" placeholder="type an username..." />
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
-  name: 'Search'
+  name: 'Search',
+
+  data() {
+    return {
+      username: ""
+    }
+  },
+
+  created() {
+    this.throttle = null;
+  },
+
+  watch: {
+    username: function () {
+      this.debounce(() => {
+        this.fetchRepos(this.username);
+      });
+    }
+  },
+
+  methods: {
+    ...mapActions([
+      'fetchRepos'
+    ]),
+
+    debounce(func) {
+      clearTimeout(this.throttle);
+      this.throttle = setTimeout(func, 500);
+    }
+  }
 }
 </script>
 

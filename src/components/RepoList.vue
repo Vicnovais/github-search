@@ -1,6 +1,6 @@
 <template>
   <div class="repo-container has-items">
-    <div class="repo-item" v-for="datum in repos" 
+    <div class="repo-item" v-for="datum in getRepos" 
                           :item="datum"
                           :key="datum.id">
       <div class="repo-base-info">
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import GitHubAPI from '../DAL/github.api'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'RepoList',
@@ -37,16 +37,10 @@ export default {
     }
   },
 
-  created() {
-    this.gitHubApi = new GitHubAPI();
-    this.getRepos();
-  },
-
-  methods: {
-    async getRepos() {
-      const repos = await this.gitHubApi.getRepos();
-      this.repos = repos;
-    }
+  computed: {
+    ...mapGetters([
+      'getRepos'
+    ])
   }
 }
 </script>
@@ -87,7 +81,7 @@ export default {
   padding: 0 20px;
   border-radius: 15px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.6);
   margin-bottom: 25px;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;

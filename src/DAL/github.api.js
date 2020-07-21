@@ -8,9 +8,9 @@ export default class GitHubaAPI {
         });
     }
 
-    async getRepos() {
+    async getRepos(username) {
         try {
-            const response = await this.api.get("/users/vicnovais/repos");
+            const response = await this.api.get(`/users/${ username }/repos`);
             return Object.values(response.data);
         }
         catch(error) {

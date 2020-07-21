@@ -11,9 +11,11 @@
 <script>
 import Search from './components/Search.vue'
 import RepoList from './components/RepoList.vue'
+import store from './store/store'
 
 export default {
   name: 'App',
+  store,
   components: {
     Search,
     RepoList
