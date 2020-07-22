@@ -1,27 +1,36 @@
 <template>
-  <div class="repo-container has-items">
-    <div class="repo-item" v-for="datum in getRepos" 
-                          :item="datum"
-                          :key="datum.id">
-      <div class="repo-base-info">
-        <span>{{ datum.name }}</span>
-        <span>{{ datum.description }}</span>
-      </div>
-      <div class="repo-extra-info">
-        <div class="star-count">
-          <i class="far fa-star" />
-          <span>{{ datum.stargazers_count }}</span>
+  <div class="repo-container" v-bind:class="{ 'has-items': getRepos.length > 0 }">
+    <template v-if="getRepos.length > 0">
+      <div class="repo-item" v-for="datum in getRepos" 
+                            :item="datum"
+                            :key="datum.id">
+        <div class="repo-base-info">
+          <span>{{ datum.name }}</span>
+          <span>{{ datum.description }}</span>
         </div>
-        <div class="fork-count">
-          <i class="fas fa-code-branch" />
-          <span>{{ datum.forks_count }}</span>
+        <div class="repo-extra-info">
+          <div class="star-count">
+            <i class="far fa-star" />
+            <span>{{ datum.stargazers_count }}</span>
+          </div>
+          <div class="fork-count">
+            <i class="fas fa-code-branch" />
+            <span>{{ datum.forks_count }}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <!-- <div class="no-search">
-      <i class="fas fa-search"></i>
-      <span>Hello, you! Make a search up there to browse repos of an user.</span>
-    </div> -->
+    </template>
+    <template v-else>
+      <template v-if="getLoading">
+        <i class="fas fa-spinner"></i>
+      </template>
+      <template v-else>
+        <div class="no-search">
+          <i class="fas fa-search"></i>
+          <span>Hello, you! Make a search up there to browse repos of an user.</span>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 
@@ -31,15 +40,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'RepoList',
 
-  data() {
-    return {
-      repos: []
-    }
-  },
-
   computed: {
     ...mapGetters([
-      'getRepos'
+      'getRepos',
+      'getLoading'
     ])
   }
 }
@@ -161,6 +165,7 @@ export default {
   justify-content: center;
   align-items: center;
   width: 50%;
+  opacity: 0.3;
 }
 
 .no-search .fa-search {
@@ -172,5 +177,14 @@ export default {
   font-size: 14px;
   margin-top: 15px;
   text-align: center;
+}
+
+.fa-spinner {
+  animation: loading .7s linear infinite;
+  font-size: 25px;
+}
+
+@keyframes loading {
+  to { transform: rotate(360deg); }
 }
 </style>

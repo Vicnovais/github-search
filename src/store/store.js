@@ -7,24 +7,42 @@ const gitHubApi = new GitHubAPI();
 
 export default new Vuex.Store({
     state: {
-        repos: []
+        repos: [],
+        loading: false
     },
 
     getters: {
         getRepos: (state) => {
             return state.repos;
+        },
+
+        getLoading: (state) => {
+            return state.loading;
         }
     },
 
     mutations: {
         setRepos(state, repos) {
             state.repos = repos;
+        },
+
+        toggleLoading(state) {
+            state.loading = !state.loading;
         }
     },
 
     actions: {
         fetchRepos({ commit }, username) {
-            gitHubApi.getRepos(username).then((data) => commit("setRepos", data));
+            if (!username) commit("setRepos", []);
+            else {
+                commit("setRepos", []);
+                commit("toggleLoading");
+                
+                gitHubApi.getRepos(username).then((data) => {
+                    commit("setRepos", data);
+                    commit("toggleLoading");
+                });
+            }
         }
     }
 });
